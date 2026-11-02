@@ -1,38 +1,41 @@
-name: Build Happ VPN APK
+
+name: Happ VPN APK Build
 
 on:
-workflow_dispatch:
-push:
-branches:
-- main
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
 
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout repository
-uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
 
-  - name: Set up Java
-    uses: actions/setup-java@v4
-    with:
-      distribution: temurin
-      java-version: '17'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  - name: Set up Gradle
-    uses: gradle/actions/setup-gradle@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
-  - name: Extract project ZIP
-    run: |
-      unzip HappVPN_Android_Project.zip -d extracted
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-  - name: Build APK
-    run: |
-      cd extracted/HappVPN
-      gradle assembleDebug
+      - name: Extract project ZIP
+        run: |
+          unzip HappVPN_Android_Project.zip -d extracted
 
-  - name: Upload APK
-    uses: actions/upload-artifact@v4
-    with:
-      name: HappVPN-debug-apk
-      path: extracted/HappVPN/app/build/outputs/apk/debug/*.apk
+      - name: Build APK
+        run: |
+          cd extracted/HappVPN
+          gradle assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HappVPN-debug-apk
+          path: extracted/HappVPN/app/build/outputs/apk/debug/*.apk
